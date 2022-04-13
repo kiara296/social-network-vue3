@@ -177,6 +177,7 @@ import { BellIcon, MenuIcon, XIcon } from "@heroicons/vue/outline";
 const navigation = [
   { name: "My Books", href: "#", current: true },
   { name: "Matches", href: "#", current: false },
+  { name: "Add New Book", href: "#", current: false },
 ];
 
 export default {
