@@ -1,23 +1,13 @@
 const express = require('express');
 const bodyParser = require('body-parser')
 
+const bookRoutesApi = require('./routes/mainRouter');
+
 const app = express();
 
 app.use(bodyParser.json())
 
-app.post('/register', (req,res)=>{
-    res.send({
-     message: 'hello ${req.body.email}! '
-    }) 
- })
-
-app.get('/', (req,res)=>{
-   res.send({
-    message: 'hello'
-   }) 
-})
-
-
+app.use('/',bookRoutesApi);
 
 app.listen(3001, () => {
     console.log("Server running on port 3001");

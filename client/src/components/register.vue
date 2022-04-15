@@ -53,12 +53,14 @@
 
                 <div class="col-span-6 sm:col-span-4">
                   <label
+                   
                     for="email-address"
                     class="block text-sm font-medium text-gray-700"
                     >Email address</label
                   >
                   <input
                     type="text"
+                     v-model="email"
                     name="email-address"
                     id="email-address"
                     autocomplete="email"
@@ -68,12 +70,14 @@
                 <div class="col-span-6 sm:col-span-4">
                   <label
                     for="Password"
+                 
                     class="block text-sm font-medium text-gray-700"
                     >Password</label
                   >
                   <input
                     type="password"
                     name="Password"
+                    v-model="password"
                     id="Password"
                     autocomplete="Password"
                     class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
@@ -161,6 +165,7 @@
             </div>
             <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
               <button
+                @click.prevent="register"
                 type="submit"
                 class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
               >
@@ -181,11 +186,32 @@
 </template>
 
 <script>
+import AuthenticationService from '../services/AuthenticationService'
 import PageHeader from "../components/navbar.vue";
 export default {
   name: "register",
   components: {
     PageHeader,
   },
+  data () {
+    return {
+      email: '',
+      password: '',
+      error: null
+    }
+  },
+  methods: {
+   async register () {
+     try {
+        await AuthenticationService.register({
+          email: this.email,
+          password: this.password,
+          
+        })
+      } catch (error) {
+        this.error = error.response.data.error
+      }
+    } 
+  }
 };
 </script>
