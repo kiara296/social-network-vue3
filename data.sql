@@ -15,7 +15,7 @@ insert into books() values(
     'Dave Eggers',
     'aHeartBreakingWork.jpg',
     'Image of Book A Heart Breaking Work',
-    '2015-05-28 05:50:06'
+    '2015-05-28 05:50:06',
     2
 );
 insert into books() values(
@@ -37,66 +37,48 @@ insert into books() values(
     4
 );
 insert into books() values(
-    4,
+    5,
     'Diary Of A Wimpy Kid',
     'Jeff Kinney',
     'diaryOfAWimpyKid.jpg',
     'Image of Book Diary Of A Wimpy Kid',
     '2015-05-25 05:50:06',
-    4
+    5
 );
 insert into books() values(
-    5,
+    6,
     'Dune',
     'Frank Herbert',
     'dune.jpg',
     'Image of Book  Dune',
     '2015-05-21 05:50:06',
-    5
+    6
 );
 insert into books() values(
-    6,
+    7,
     'Fahrenheit',
     'Ray Bradbury',
     'fahrenheit.jpg',
     'Image of Book  Fahrenheit',
     '2015-05-22 05:50:06',
-    5
+    7
 );
 insert into books() values(
-    7,
+    8,
     'Fear And Loathing In Las Vegas',
     'Hunter Ray Thompson',
     'fearAndLoathingInLasVegas.jpg',
     'Image of Book  FahrFear And Loathing In Las Vegas',
     '2015-05-23 05:50:06',
-    6
+    8
 );
 insert into books() values(
-    7,
+    9,
     'Gone Girl',
     'Gillian Flynn',
     'goneGirl.jpg',
     'Image of Book  Gone Girl',
     '2015-05-20 05:50:06',
-    7
-);
-insert into books() values(
-    8,
-    'Harry Potter And The Sorcerers Stone',
-    'J.K Rowlling',
-    'harryPotterAndTheSorcerersStonejpg.jpg',
-    'Image of Book Harry Potter And The Sorcerers Stone',
-    '2015-06-25 05:50:06',
-    8
-);
-insert into books() values(
-    9,
-    'In Cold Blood',
-    'J.K Rowlling',
-    'inColdBlood.jpg',
-    'Image of Book In Cold Blood',
-    '2015-09-25 05:50:06',
     9
 );
 insert into books() values(
@@ -105,10 +87,27 @@ insert into books() values(
     'J.K Rowlling',
     'harryPotterAndTheSorcerersStonejpg.jpg',
     'Image of Book Harry Potter And The Sorcerers Stone',
-    '2015-02-25 05:50:06',
+    '2015-06-25 05:50:06',
     10
 );
-
+insert into books() values(
+    11,
+    'In Cold Blood',
+    'J.K Rowlling',
+    'inColdBlood.jpg',
+    'Image of Book In Cold Blood',
+    '2015-09-25 05:50:06',
+    11
+);
+insert into books() values(
+    12,
+    'Harry Potter And The Sorcerers Stone',
+    'J.K Rowlling',
+    'harryPotterAndTheSorcerersStonejpg.jpg',
+    'Image of Book Harry Potter And The Sorcerers Stone',
+    '2015-02-25 05:50:06',
+    12
+);
 insert into users() values(
     1,
     'ppalala@mail.com',

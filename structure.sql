@@ -5,17 +5,17 @@ SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
 
 -- -----------------------------------------------------
--- Schema mydb
+-- Schema mybookdb
 -- -----------------------------------------------------
 DROP SCHEMA IF EXISTS `mybookdb` ;
 
 -- -----------------------------------------------------
--- Schema mydb
+-- Schema mybookdb
 -- -----------------------------------------------------
 CREATE SCHEMA IF NOT EXISTS `mybookdb` DEFAULT CHARACTER SET utf8mb4 ;
 USE `mybookdb` ;
 
--- Table `mydb`.`books`
+-- Table `mybookdb`.`books`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `mybookdb`.`books` ;
 
@@ -26,20 +26,19 @@ CREATE TABLE IF NOT EXISTS `mybookdb`.`books` (
   `image` VARCHAR(100) NULL DEFAULT NULL,
   `alt` VARCHAR(100) NULL DEFAULT NULL,
   `date` DATETIME NULL DEFAULT NULL,
-   `user_id` INT NOT NULL,
+  `user_id` INT NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE,
-  INDEX `fk_transaction_user1_idx` (`user_id` ASC) VISIBLE,
-  CONSTRAINT `fk_transaction_user1`
+  CONSTRAINT `user_id`
     FOREIGN KEY (`user_id`)
-    REFERENCES `mydb`.`users` (`id`))
+    REFERENCES `mybookdb`.`users` (`id`))
 ENGINE = InnoDB
 AUTO_INCREMENT = 14
 DEFAULT CHARACTER SET = utf8mb4;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`users`
+-- Table `mybookdb`.`users`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `mybookdb`.`users` ;
 

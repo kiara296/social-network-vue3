@@ -4,33 +4,31 @@
       <page-header />
     </v-register>
   </div>
-  <div class="mt-10 sm:mt-0">
+  <div class="mt-10 sm:m-5">
     <div class="md:grid md:grid-cols-3 md:gap-6">
       <div class="md:col-span-1">
         <div class="px-4 sm:px-0">
           <h3 class="text-lg font-medium leading-6 text-gray-900">
             Personal Information
           </h3>
-          <p class="mt-1 text-sm text-gray-600">
-            Use a permanent address where you can receive mail.
-          </p>
         </div>
       </div>
       <div class="mt-5 md:mt-0 md:col-span-2">
-        <form action="#" method="POST">
+        <form @submit.prevent="register">
           <div class="shadow overflow-hidden sm:rounded-md">
             <div class="px-4 py-5 bg-white sm:p-6">
               <div class="grid grid-cols-6 gap-6">
                 <div class="col-span-6 sm:col-span-3">
                   <label
-                    for="first-name"
+                    for="name"
                     class="block text-sm font-medium text-gray-700"
                     >First name</label
                   >
                   <input
                     type="text"
-                    name="first-name"
-                    id="first-name"
+                    v-model="name"
+                    name="name"
+                    id="name"
                     autocomplete="given-name"
                     class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                   />
@@ -38,14 +36,15 @@
 
                 <div class="col-span-6 sm:col-span-3">
                   <label
-                    for="last-name"
+                    for="lastname"
                     class="block text-sm font-medium text-gray-700"
                     >Last name</label
                   >
                   <input
                     type="text"
-                    name="last-name"
-                    id="last-name"
+                    v-model="lastname"
+                    name="lastname"
+                    id="lastname"
                     autocomplete="family-name"
                     class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                   />
@@ -53,14 +52,13 @@
 
                 <div class="col-span-6 sm:col-span-4">
                   <label
-                   
                     for="email-address"
                     class="block text-sm font-medium text-gray-700"
                     >Email address</label
                   >
                   <input
                     type="text"
-                     v-model="email"
+                    v-model="email"
                     name="email-address"
                     id="email-address"
                     autocomplete="email"
@@ -70,7 +68,6 @@
                 <div class="col-span-6 sm:col-span-4">
                   <label
                     for="Password"
-                 
                     class="block text-sm font-medium text-gray-700"
                     >Password</label
                   >
@@ -84,82 +81,48 @@
                   />
                 </div>
 
-                <div class="col-span-6 sm:col-span-3">
-                  <label
-                    for="country"
-                    class="block text-sm font-medium text-gray-700"
-                    >Country</label
+                <div class="col-span-6 sm:col-span-4">
+                  <label class="block text-sm font-medium text-gray-700">
+                    Profile photo
+                  </label>
+                  <div
+                    class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md"
                   >
-                  <select
-                    id="country"
-                    name="country"
-                    autocomplete="country-name"
-                    class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                  >
-                    <option>United States</option>
-                    <option>Canada</option>
-                    <option>Mexico</option>
-                  </select>
-                </div>
-
-                <div class="col-span-6">
-                  <label
-                    for="street-address"
-                    class="block text-sm font-medium text-gray-700"
-                    >Street address</label
-                  >
-                  <input
-                    type="text"
-                    name="street-address"
-                    id="street-address"
-                    autocomplete="street-address"
-                    class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                  />
-                </div>
-
-                <div class="col-span-6 sm:col-span-6 lg:col-span-2">
-                  <label
-                    for="city"
-                    class="block text-sm font-medium text-gray-700"
-                    >City</label
-                  >
-                  <input
-                    type="text"
-                    name="city"
-                    id="city"
-                    autocomplete="address-level2"
-                    class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                  />
-                </div>
-
-                <div class="col-span-6 sm:col-span-3 lg:col-span-2">
-                  <label
-                    for="region"
-                    class="block text-sm font-medium text-gray-700"
-                    >State / Province</label
-                  >
-                  <input
-                    type="text"
-                    name="region"
-                    id="region"
-                    autocomplete="address-level1"
-                    class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                  />
-                </div>
-
-                <div class="col-span-6 sm:col-span-3 lg:col-span-2">
-                  <label
-                    for="postal-code"
-                    class="block text-sm font-medium text-gray-700"
-                    >ZIP / Postal code</label
-                  >
-                  <input
-                    type="text"
-                    name="postal-code"
-                    id="postal-code"
-                    autocomplete="postal-code"
-                    class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                  />
+                    <div class="space-y-1 text-center">
+                      <svg
+                        class="mx-auto h-12 w-12 text-gray-400"
+                        stroke="currentColor"
+                        fill="none"
+                        viewBox="0 0 48 48"
+                        aria-hidden="true"
+                      >
+                        <path
+                          d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                      <div class="flex text-sm text-gray-600">
+                        <label
+                          for="profileImage"
+                          class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
+                        >
+                          <span>Upload a file</span>
+                          <input
+                            id="profileImage"
+                            name="profileImage"
+                            type="file"
+                            class="sr-only"
+                          />
+                        </label>
+                        <p class="pl-1">or drag and drop</p>
+                      </div>
+                      <p class="text-xs text-gray-500">
+                        PNG, JPG, GIF up to 10MB
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -186,32 +149,33 @@
 </template>
 
 <script>
-import AuthenticationService from '../services/AuthenticationService'
+import AuthenticationService from "../services/AuthenticationService";
 import PageHeader from "../components/navbar.vue";
 export default {
   name: "register",
   components: {
     PageHeader,
   },
-  data () {
+  data() {
     return {
-      email: '',
-      password: '',
-      error: null
-    }
+      name: "",
+      lastname: "",
+      email: "",
+      password: "",
+      profileImage: "",
+      error: null,
+    };
   },
   methods: {
-   async register () {
-     try {
-        await AuthenticationService.register({
+    async register() {
+      try {
+         const response = await AuthenticationService.register({
           email: this.email,
-          password: this.password,
-          
-        })
-      } catch (error) {
-        this.error = error.response.data.error
+          password: this.password
+      })} catch (error) {
+        /*   this.error = error.response.data.error */
       }
-    } 
-  }
+    },
+  },
 };
 </script>

@@ -1,47 +1,72 @@
 const mainService = require("../services/mainService");
 
 const mainController = {
-  
-   catalog: async (req, res) => {
-       console.log('test')
+  /* Posts  */
+
+  /* Get All Books */
+  catalog: async (req, res) => {
+    console.log("test");
     try {
-        const allBooks = await mainService.getBooks();
+      const allBooks = await mainService.getBooks();
 
       return res.status(200).json({
         allBooks,
         status: 200,
-        message: 'hello'
-      })
-    } catch(e) {
+        message: "hello",
+      });
+    } catch (e) {
       console.log("\nError\n", e);
     }
   },
-  
-  register: async (req, res) => {
-     /*   let errors = validationResult(req); */
-   /*  let data = { ...req.body, file: req.file ? req.file.filename : ""}; */
-    /* if (errors.isEmpty()){ */
-    /* try {
-     
-      await mainService.createUser(data)
-      
-      res.send('usuario creado');
-      
-    } catch(e) {
-      res.send({
-        message: 'hubo un error'
-      })
-       }
-     /*  console.log(e); */
+
+  /* Users */
+
+  register: (req, res) => {
+    res.send(req.body);
+  },
+
+  login: async (req, res) => {
+    console.log("desde el login");
+    try {
+      const {email, password} = req.body;
+      const user = await mainService.getUserByEmail(email);
+      if (!user) {
+        return res.status(403).send({
+          error: 'The login information was incorrect'
+        })
+      }
+      const isPasswordValid = await user.comparePassword(password)
+      if (!isPasswordValid) {
+        return res.status(403).send({
+          error: 'The login information was incorrect'
+        })
+      }
+
+      res.send(user);
+    } catch (err) {
+      res.status(500).send({
+        error: "An error has occured trying to log in",
+      });
     }
- /*  } else { */
-   
-   /*  let message = null; */
-/* 
-   
+  },
+
+  getAllUsers: async (req, res) => {
+    console.log("desde el login");
+    try {
+      const allUser = await mainService.getUsers();
+      return res.status(200).json({
+        allUser,
+        status: 200,
+        message: "hello",
+      });
+    
+    } catch (err) {
+      res.status(500).send({
+        error: "An error has occured trying to log in",
+      });
+    }
   }
-  }, */
-   
-};
+
+} 
 
 module.exports = mainController;
