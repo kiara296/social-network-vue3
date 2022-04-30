@@ -1,8 +1,17 @@
 const mainService = require("../services/mainService");
+const jwt = require('jsonwebtoken')
+const config = require('../../database/config/config')
+
+function jwtSignUser (user) {
+  const ONE_WEEK = 60 * 60 * 24 * 7
+  return jwt.sign(user, config.authentication.jwtSecret, {
+    expiresIn: ONE_WEEK
+  })
+}
 
 const mainController = {
   /* Posts  */
-
+ 
   /* Get All Books */
   catalog: async (req, res) => {
     console.log("test");
@@ -21,12 +30,21 @@ const mainController = {
 
   /* Users */
 
-  register: (req, res) => {
-    res.send(req.body);
+  register: async (req, res) => {
+    console.log('hola registro')
+    try {
+      const data = {...req.body}
+      const user = await mainService.createUser(data)
+      res.send(user)
+    } catch (err) {
+      res.status(500).send({
+        error: "An error has occured trying to log in",
+      });
+    }
   },
 
   login: async (req, res) => {
-    console.log("desde el login");
+   
     try {
       const {email, password} = req.body;
       const user = await mainService.getUserByEmail(email);
@@ -35,13 +53,16 @@ const mainController = {
           error: 'The login information was incorrect'
         })
       }
-      const isPasswordValid = await user.comparePassword(password)
-      if (!isPasswordValid) {
-        return res.status(403).send({
-          error: 'The login information was incorrect'
-        })
-      }
 
+      const isPasswordValid = function (password) {
+        return bcrypt.compareAsync(password, user.password)
+      }
+        if(!isPasswordValid){
+        return res.status(403).send({
+          error: 'The password information was incorrect'
+        })
+      } 
+     
       res.send(user);
     } catch (err) {
       res.status(500).send({

@@ -14,21 +14,23 @@
         </div>
       </div>
       <div class="mt-5 md:mt-0 md:col-span-2">
-        <form @submit.prevent="register">
+        <Form @submit="register">
           <div class="shadow overflow-hidden sm:rounded-md">
             <div class="px-4 py-5 bg-white sm:p-6">
               <div class="grid grid-cols-6 gap-6">
                 <div class="col-span-6 sm:col-span-3">
                   <label
-                    for="name"
+                    for="firstName"
                     class="block text-sm font-medium text-gray-700"
                     >First name</label
                   >
-                  <input
+                   <ErrorMessage class="text-red-500" name="firstName" />
+                  <Field
                     type="text"
                     v-model="name"
-                    name="name"
-                    id="name"
+                    name="firstName"
+                    id="firstName"
+                    rules="required"
                     autocomplete="given-name"
                     class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                   />
@@ -40,28 +42,32 @@
                     class="block text-sm font-medium text-gray-700"
                     >Last name</label
                   >
-                  <input
+                  <ErrorMessage class="text-red-500" name="lastname" />
+                  <Field
                     type="text"
                     v-model="lastname"
                     name="lastname"
                     id="lastname"
                     autocomplete="family-name"
+                    rules="required"
                     class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                   />
                 </div>
 
                 <div class="col-span-6 sm:col-span-4">
                   <label
-                    for="email-address"
+                    for="emailAddress"
                     class="block text-sm font-medium text-gray-700"
                     >Email address</label
                   >
-                  <input
+                  <ErrorMessage class="text-red-500" name="emailAddress" />
+                  <Field
                     type="text"
                     v-model="email"
-                    name="email-address"
-                    id="email-address"
+                    name="emailAddress"
+                    id="emailAddress"
                     autocomplete="email"
+                    rules="required|email"
                     class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                   />
                 </div>
@@ -71,17 +77,36 @@
                     class="block text-sm font-medium text-gray-700"
                     >Password</label
                   >
-                  <input
+                    <ErrorMessage class="text-red-500" name="Password" />
+                  <Field
                     type="password"
                     name="Password"
                     v-model="password"
                     id="Password"
                     autocomplete="Password"
+                    rules="required"
+                    class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                  />
+                </div>
+                 <div class="col-span-6 sm:col-span-4">
+                  <label
+                    for="confirmation"
+                    class="block text-sm font-medium text-gray-700"
+                    >Confirm password</label
+                  >
+                  <ErrorMessage class="text-red-500" name="confirmation" />
+                  <Field
+                    type="password"
+                    name="confirmation"
+                    v-model="confirmation"
+                    id="confirmation"
+                    rules="required|confirmed:@password"
+                    autocomplete="confirmation"
                     class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                   />
                 </div>
 
-                <div class="col-span-6 sm:col-span-4">
+<!--                 <div class="col-span-6 sm:col-span-4">
                   <label class="block text-sm font-medium text-gray-700">
                     Profile photo
                   </label>
@@ -109,7 +134,7 @@
                           class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
                         >
                           <span>Upload a file</span>
-                          <input
+                          <Field
                             id="profileImage"
                             name="profileImage"
                             type="file"
@@ -124,7 +149,7 @@
                     </div>
                   </div>
                 </div>
-              </div>
+ -->              </div>
             </div>
             <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
               <button
@@ -151,10 +176,47 @@
 <script>
 import AuthenticationService from "../services/AuthenticationService";
 import PageHeader from "../components/navbar.vue";
+import { Form, Field, ErrorMessage } from "vee-validate";
+import { defineRule, configure  } from 'vee-validate';
+import { required, email, confirmed } from '@vee-validate/rules';
+import { localize } from '@vee-validate/i18n';
+
+
+defineRule('required', required);
+defineRule('email', email);
+defineRule('confirmed', confirmed);
+
+
+
+localize('en', {
+  fields: {
+    Password: {
+      required: 'Hey! Password cannot be empty',
+    },
+    firstName: {
+      required: 'Hey! First Name cannot be empty',
+    },
+    lastname: {
+      required: 'Hey! Last Name cannot be empty',
+    },
+    emailAddress: {
+      required: 'Hey! Email Address cannot be empty',
+      email: 'It must be a valid email address'
+    },
+    confirmation: {
+      required: 'Hey! Password confirmation cannot be empty',
+      confirmed: 'Passwords must match'
+    },
+  },
+});
+
 export default {
   name: "register",
   components: {
     PageHeader,
+    Form,
+    Field,
+    ErrorMessage,
   },
   data() {
     return {
@@ -162,7 +224,8 @@ export default {
       lastname: "",
       email: "",
       password: "",
-      profileImage: "",
+      confirmation: "",
+      /* profileImage: "", */
       error: null,
     };
   },
@@ -170,12 +233,15 @@ export default {
     async register() {
       try {
          const response = await AuthenticationService.register({
+          name: this.name,
+          lastname: this.lastname,
           email: this.email,
           password: this.password
       })} catch (error) {
         /*   this.error = error.response.data.error */
       }
-    },
+    }
+    
   },
 };
 </script>

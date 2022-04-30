@@ -1,6 +1,7 @@
 const mainDao = require("../dao/mainDao");
 let bcrypt= require ('bcryptjs');
 
+
 const mainService = {
   
     getBooks: async () => {
@@ -21,12 +22,16 @@ const mainService = {
             name: body.name,
             lastname: body.lastname,
             username: body.email,
-            password: bcrypt.hashSync(body.password, 10),
-            image: body.file ? body.file : "" 
+            password:  bcrypt.hash(body.password, 10,),
+            /* image: body.file ? body.file : ""   */
         }
     
           await mainDao.createUser(user);
       },
+
+      comparePassword: function (password) {
+        return bcrypt.compareAsync(password, user.password)
+      }
   
 
   }
