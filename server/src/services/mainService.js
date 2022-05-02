@@ -23,12 +23,10 @@ const mainService = {
             lastname: body.lastname,
             username: body.email,
             password:   bcrypt.hashSync(body.password, 10),
-         /*    image: body.file.filename */
+            image: body.file ? body.file : ""
         }
     
-         const response = await mainDao.createUser(user);
-        return response
-        
+         await mainDao.createUser(user)
       }  
 
   }

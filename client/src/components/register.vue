@@ -4,6 +4,14 @@
       <page-header />
     </v-register>
   </div>
+   <div>
+        <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
+         Create a free account
+        </h2>
+        <p class="mt-2 text-center text-sm text-gray-600">
+         Meet people and swap books
+        </p>
+      </div>
   <div class="mt-10 sm:m-5">
     <div class="md:grid md:grid-cols-3 md:gap-6">
       <div class="md:col-span-1">

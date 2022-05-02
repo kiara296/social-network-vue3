@@ -31,16 +31,13 @@ const mainController = {
   /* Users */
 
   register: async (req, res) => {
-
+    const data = {...req.body, file: req.file ? req.file.filename : ""}
     try {
-      const data = {...req.body}
+      
       const user = await mainService.createUser(data)
-    console.log(data.name)
+      console.log(user)
 
-      res.send({
-        user: user
-        
-      });
+      res.send(user);
     } catch (err) {
       res.status(500).send({
         error: "An error has occured trying to log in",

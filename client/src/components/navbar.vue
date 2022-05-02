@@ -17,19 +17,24 @@
           class="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start"
         >
           <div class="flex-shrink-0 flex items-center">
-            <img
-              class="block lg:hidden h-8 w-auto"
-              src="../assets/logo.png"
-              alt="Workflow"
-            />
-            <img
-              class="hidden lg:block h-10 w-auto"
-              src="../assets/logo.png"
-              alt="Workflow"
-            />
+            <router-link to="/">
+              <img
+                class="block lg:hidden h-8 w-auto"
+                src="../assets/logo.png"
+                alt="Logo"
+              />
+            </router-link>
+            <router-link to="/">
+              <img
+                class="hidden lg:block h-10 w-auto"
+                src="../assets/logo.png"
+                alt="Logo"
+              />
+            </router-link>
           </div>
+
           <div class="hidden sm:block sm:ml-6">
-            <div class="flex space-x-4">
+            <div class="flex space-x-4" v-if="$store.state.isUserLoggedIn">
               <a
                 v-for="item in navigation"
                 :key="item.name"
@@ -44,34 +49,61 @@
                 >{{ item.name }}</a
               >
               <div class="flex items-center justify-center">
-              <div class="flex border-2 rounded">
-                <input
-                  type="text"
-                  class="px-4 py-2 w-80"
-                  placeholder="Search..."
-                />
-                <button class="flex items-center justify-center px-4 border-l">
-                  <svg
-                    class="w-6 h-6 text-gray-600"
-                    fill="currentColor"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
+                <div class="flex border-2 rounded">
+                  <input
+                    type="text"
+                    class="px-4 py-2 w-80"
+                    placeholder="Search..."
+                  />
+                  <button
+                    class="flex items-center justify-center px-4 border-l"
                   >
-                    <path
-                      d="M16.32 14.9l5.39 5.4a1 1 0 0 1-1.42 1.4l-5.38-5.38a8 8 0 1 1 1.41-1.41zM10 16a6 6 0 1 0 0-12 6 6 0 0 0 0 12z"
-                    />
-                  </svg>
-                </button>
+                    <svg
+                      class="w-6 h-6 text-gray-600"
+                      fill="currentColor"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        d="M16.32 14.9l5.39 5.4a1 1 0 0 1-1.42 1.4l-5.38-5.38a8 8 0 1 1 1.41-1.41zM10 16a6 6 0 1 0 0-12 6 6 0 0 0 0 12z"
+                      />
+                    </svg>
+                  </button>
+                </div>
               </div>
             </div>
-            </div>
-            
           </div>
         </div>
         <div
           class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0"
         >
+          <div class="grid grid-cols-2 divide-x">
+            <!-- Login button -->
+            <router-link to="login">
+              <button
+                v-if="!$store.state.isUserLoggedIn"
+                type="button"
+                class="bg-gray-800 p-2 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
+              >
+                <span>Login</span>
+              </button>
+            </router-link>
+
+            <!-- Sign up button -->
+            <router-link to="register">
+              <button
+                v-if="!$store.state.isUserLoggedIn"
+                type="button"
+                class="bg-gray-800 p-2 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
+              >
+                <span>Sign Up</span>
+              </button>
+            </router-link>
+          </div>
+
+          <!-- Notifications -->
           <button
+            v-if="$store.state.isUserLoggedIn"
             type="button"
             class="bg-gray-800 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
           >
@@ -80,7 +112,11 @@
           </button>
 
           <!-- Profile dropdown -->
-          <Menu as="div" class="ml-3 relative">
+          <Menu
+            as="div"
+            class="ml-3 relative"
+            v-if="$store.state.isUserLoggedIn"
+          >
             <div>
               <MenuButton
                 class="bg-gray-800 flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
@@ -124,15 +160,19 @@
                     >Settings</a
                   >
                 </MenuItem>
-                <MenuItem v-slot="{ active }">
-                  <a
-                    href="#"
+                <MenuItem
+                  v-slot="{ active }"
+                  v-if="$store.state.isUserLoggedIn"
+                >
+                  <button
                     :class="[
                       active ? 'bg-gray-100' : '',
                       'block px-4 py-2 text-sm text-gray-700',
                     ]"
-                    >Sign out</a
+                    @click="logout"
                   >
+                    Sign out
+                  </button>
                 </MenuItem>
               </MenuItems>
             </transition>
@@ -197,6 +237,13 @@ export default {
     return {
       navigation,
     };
+  },
+  methods: {
+    logout() {
+      this.$store.dispatch("setToken", null);
+      this.$store.dispatch("setUser", null);
+      this.$router.push("/");
+    },
   },
 };
 </script>

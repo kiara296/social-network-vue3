@@ -2,7 +2,7 @@
 <div id="home"></div>
 <v-home>
     <pageHeader></pageHeader>
-    <Stories></Stories>
+    <Stories v-if="$store.state.isUserLoggedIn"></Stories>
     <Images></Images>
 </v-home>
 
