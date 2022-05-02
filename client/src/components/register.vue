@@ -24,7 +24,7 @@
                     class="block text-sm font-medium text-gray-700"
                     >First name</label
                   >
-                   <ErrorMessage class="text-red-500" name="firstName" />
+                  <ErrorMessage class="text-red-500" name="firstName" />
                   <Field
                     type="text"
                     v-model="name"
@@ -77,7 +77,7 @@
                     class="block text-sm font-medium text-gray-700"
                     >Password</label
                   >
-                    <ErrorMessage class="text-red-500" name="Password" />
+                  <ErrorMessage class="text-red-500" name="Password" />
                   <Field
                     type="password"
                     name="Password"
@@ -88,7 +88,7 @@
                     class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                   />
                 </div>
-                 <div class="col-span-6 sm:col-span-4">
+                <div class="col-span-6 sm:col-span-4">
                   <label
                     for="confirmation"
                     class="block text-sm font-medium text-gray-700"
@@ -100,13 +100,13 @@
                     name="confirmation"
                     v-model="confirmation"
                     id="confirmation"
-                    rules="required|confirmed:@password"
+                    rules="required|confirmed:@Password"
                     autocomplete="confirmation"
                     class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                   />
                 </div>
 
-<!--                 <div class="col-span-6 sm:col-span-4">
+                <div class="col-span-6 sm:col-span-4">
                   <label class="block text-sm font-medium text-gray-700">
                     Profile photo
                   </label>
@@ -131,17 +131,20 @@
                       <div class="flex text-sm text-gray-600">
                         <label
                           for="profileImage"
+                          @dragenter.stop.prevent="" @dragover.stop.prevent="" @drop="loadImage($event)"
                           class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
                         >
+                        <img v-if="profileImage" :src="profileImage"/>
                           <span>Upload a file</span>
                           <Field
                             id="profileImage"
                             name="profileImage"
+                            @change="selectFile($event)"
                             type="file"
                             class="sr-only"
                           />
                         </label>
-                        <p class="pl-1">or drag and drop</p>
+                        <p class="pl-1" v-if="!profileImage">or drag and drop</p>
                       </div>
                       <p class="text-xs text-gray-500">
                         PNG, JPG, GIF up to 10MB
@@ -149,7 +152,7 @@
                     </div>
                   </div>
                 </div>
- -->              </div>
+              </div>
             </div>
             <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
               <button
@@ -161,7 +164,7 @@
               </button>
             </div>
           </div>
-        </form>
+        </Form>
       </div>
     </div>
   </div>
@@ -177,35 +180,32 @@
 import AuthenticationService from "../services/AuthenticationService";
 import PageHeader from "../components/navbar.vue";
 import { Form, Field, ErrorMessage } from "vee-validate";
-import { defineRule, configure  } from 'vee-validate';
-import { required, email, confirmed } from '@vee-validate/rules';
-import { localize } from '@vee-validate/i18n';
+import { defineRule, configure } from "vee-validate";
+import { required, email, confirmed } from "@vee-validate/rules";
+import { localize } from "@vee-validate/i18n";
 
+defineRule("required", required);
+defineRule("email", email);
+defineRule("confirmed", confirmed);
 
-defineRule('required', required);
-defineRule('email', email);
-defineRule('confirmed', confirmed);
-
-
-
-localize('en', {
+localize("en", {
   fields: {
     Password: {
-      required: 'Hey! Password cannot be empty',
+      required: "Hey! Password cannot be empty",
     },
     firstName: {
-      required: 'Hey! First Name cannot be empty',
+      required: "Hey! First Name cannot be empty",
     },
     lastname: {
-      required: 'Hey! Last Name cannot be empty',
+      required: "Hey! Last Name cannot be empty",
     },
     emailAddress: {
-      required: 'Hey! Email Address cannot be empty',
-      email: 'It must be a valid email address'
+      required: "Hey! Email Address cannot be empty",
+      email: "It must be a valid email address",
     },
     confirmation: {
-      required: 'Hey! Password confirmation cannot be empty',
-      confirmed: 'Passwords must match'
+      required: "Hey! Password confirmation cannot be empty",
+      confirmed: "Passwords must match",
     },
   },
 });
@@ -225,23 +225,60 @@ export default {
       email: "",
       password: "",
       confirmation: "",
-      /* profileImage: "", */
+      profileImage: "",
       error: null,
     };
   },
+
   methods: {
     async register() {
       try {
-         const response = await AuthenticationService.register({
-          name: this.name,
-          lastname: this.lastname,
-          email: this.email,
-          password: this.password
-      })} catch (error) {
+        const formData = new FormData();
+        formData.set("name", this.name);
+        formData.set("lastname", this.lastname);
+        formData.set("email", this.email);
+        formData.set("password", this.email);
+        formData.append("profileImage", this.profileImage);
+        
+        const response = await AuthenticationService.register(formData);
+
+        this.$store.dispatch('setToken', response.data.token)
+        this.$store.dispatch('setUser', response.data.user)
+        this.$router.push('/login')
+      } catch (error) {
         /*   this.error = error.response.data.error */
       }
+    },
+    loadImage(e) {
+      e.stopPropagation()
+      e.preventDefault()
+      
+      const transfer = e.dataTransfer
+      const files = transfer.files
+      const image = files[0]
+      
+      const reader = new FileReader()
+      reader.addEventListener("load", () => {
+        this.profileImage = reader.result
+        this.$emit("selected", image)
+      })
+
+      if(image) {
+        reader.readAsDataURL(image)
+        
+      }
+    },
+    selectFile(e) {
+      const reader = new FileReader()
+      reader.addEventListener("load", () => {
+        this.profileImage = reader.result
+      })
+
+      if(e.target.files) {
+        reader.readAsDataURL(e.target.files[0])
+        this.$emit("selected", e.target.files[0])
+      }
     }
-    
   },
 };
 </script>

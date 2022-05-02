@@ -22,17 +22,14 @@ const mainService = {
             name: body.name,
             lastname: body.lastname,
             username: body.email,
-            password:  bcrypt.hash(body.password, 10,),
-            /* image: body.file ? body.file : ""   */
+            password:   bcrypt.hashSync(body.password, 10),
+         /*    image: body.file.filename */
         }
     
-          await mainDao.createUser(user);
-      },
-
-      comparePassword: function (password) {
-        return bcrypt.compareAsync(password, user.password)
-      }
-  
+         const response = await mainDao.createUser(user);
+        return response
+        
+      }  
 
   }
   

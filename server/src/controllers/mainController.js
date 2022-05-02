@@ -4,7 +4,7 @@ const config = require('../../database/config/config')
 
 function jwtSignUser (user) {
   const ONE_WEEK = 60 * 60 * 24 * 7
-  return jwt.sign(user, config.authentication.jwtSecret, {
+  return jwt.sign(user, 'secret', {
     expiresIn: ONE_WEEK
   })
 }
@@ -31,11 +31,16 @@ const mainController = {
   /* Users */
 
   register: async (req, res) => {
-    console.log('hola registro')
+
     try {
       const data = {...req.body}
       const user = await mainService.createUser(data)
-      res.send(user)
+    console.log(data.name)
+
+      res.send({
+        user: user
+        
+      });
     } catch (err) {
       res.status(500).send({
         error: "An error has occured trying to log in",
@@ -48,6 +53,11 @@ const mainController = {
     try {
       const {email, password} = req.body;
       const user = await mainService.getUserByEmail(email);
+      const userJson =  user.toJSON(user)
+      const token = jwtSignUser (userJson)
+
+  
+
       if (!user) {
         return res.status(403).send({
           error: 'The login information was incorrect'
@@ -63,7 +73,10 @@ const mainController = {
         })
       } 
      
-      res.send(user);
+      res.send({
+        user: user,
+        token:token
+      });
     } catch (err) {
       res.status(500).send({
         error: "An error has occured trying to log in",

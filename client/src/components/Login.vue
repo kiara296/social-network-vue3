@@ -119,16 +119,13 @@ export default {
   },
   methods: {
     async login() {
-      try {
-        const response = await AuthenticationService.login({
-          email: this.email,
-          password: this.password,
-        });
-          this.$router.push('/')
-      } catch (error) {
-        /*  this.error = error.response.data.error */
-      }
-    
+      const response = await AuthenticationService.login({
+        email: this.email,
+        password: this.password,
+      });
+      this.$store.dispatch("setToken", response.data.token);
+      this.$store.dispatch("setUser", response.data.user);
+      this.$router.push("/");
     },
     validateEmail(value) {
       // if the field is empty
