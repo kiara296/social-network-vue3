@@ -14,7 +14,7 @@ const mainController = {
  
   /* Get All Books */
   catalog: async (req, res) => {
-    console.log("test");
+   
     try {
       const allBooks = await mainService.getBooks();
 
@@ -35,7 +35,7 @@ const mainController = {
     try {
       
       const user = await mainService.createUser(data)
-      console.log(user)
+    
 
       res.send(user);
     } catch (err) {
@@ -82,7 +82,6 @@ const mainController = {
   },
 
   getAllUsers: async (req, res) => {
-    console.log("desde el login");
     try {
       const allUser = await mainService.getUsers();
       return res.status(200).json({
